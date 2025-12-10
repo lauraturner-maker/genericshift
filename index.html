@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Shift Overview</title>
+
+<style>
+    /* GLOBAL FIX — prevents overflow in Staffbase containers */
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #ffffff;
+        padding: 0;
+        margin: 0;
+    }
+
+    .widget {
+        width: 100%;
+        max-width: 480px;
+        margin: auto;
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 16px;
+    }
+
+    .date-range {
+        text-align: center;
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: #333;
+        font-size: 16px;
+    }
+
+    .nav-arrows {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 20px;
+        padding: 0 4px;
+        color: #444;
+    }
+
+    .week-days {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 4px;
+        margin-bottom: 12px;
+        font-size: 13px;
+        color: #777;
+    }
+
+    .week-days div {
+        width: 100%;
+        text-align: center;
+        padding: 8px 0;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .week-days .active {
+        background: #3F51B5;
+        color: white;
+        font-weight: 600;
+    }
+
+    .summary {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #444;
+    }
+
+    /* Day label */
+    .day-label {
+        margin-top: 20px;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #444;
+        font-size: 15px;
+        padding-left: 4px;
+    }
+
+    .shift-card {
+        width: 100%;
+        background: white;
+        padding: 14px;
+        border-radius: 12px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        border-left: 4px solid #3F51B5;
+        margin-bottom: 16px;
+    }
+
+    .shift-time {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+
+    .shift-details {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 3px;
+    }
+
+    .shift-meta {
+        text-align: right;
+        font-size: 13px;
+        color: #777;
+        margin-top: 6px;
+    }
+
+    /* ========== Larger button (30% bigger) ========== */
+    .swap-btn {
+        margin-top: 10px;
+        padding: 12px 14px;              /* Increased */
+        font-size: 15px;                 /* Increased */
+        border-radius: 8px;              /* Slightly larger */
+        background: #3F51B5;
+        color: white;
+        border: none;
+        cursor: pointer;
+        width: 100%;                     /* Full width for touch devices */
+    }
+
+    .swap-btn:hover {
+        background: #00468a;
+    }
+
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .modal-content {
+        background: white;
+        padding: 20px;
+        width: 100%;
+        max-width: 360px;
+        border-radius: 12px;
+    }
+
+    .close {
+        float: right;
+        cursor: pointer;
+        font-size: 22px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="widget">
+
+    <h2 style="margin-bottom: 2px; text-align:center;">Shift Overview</h2>
+
+    <div class="date-range">Dec 8 – Dec 14, 2025</div>
+
+    <div class="nav-arrows">
+        <span>&lt;</span>
+        <span>&gt;</span>
+    </div>
+
+    <div class="week-days">
+        <div>Mo<br>8</div>
+        <div class="active">Tu<br>9</div>
+        <div>We<br>10</div>
+        <div>Th<br>11</div>
+        <div>Fr<br>12</div>
+        <div>Sa<br>13</div>
+        <div>Su<br>14</div>
+    </div>
+
+    <div class="summary">30 hrs / $285</div>
+
+    <!-- Example days/shifts -->
+    <div class="day-label">Tu, Dec 9</div>
+    <div class="shift-card">
+        <div class="shift-time">6am – 4pm</div>
+        <div class="shift-details">Hospitalist</div>
+        <div class="shift-details">Medical City Arlington</div>
+        <div class="shift-meta">10 hrs</div>
+        <button class="swap-btn" onclick="openSwapModal('10am – 5:30pm')">Request Swap</button>
+    </div>
+
+    <div class="day-label">Wed, Dec 10</div>
+    <div class="shift-card">
+        <div class="shift-time">7pm – 7am</div>
+        <div class="shift-details">Emergency Physician</div>
+        <div class="shift-details">Charlton Medical Center</div>
+        <div class="shift-meta">12 hrs</div>
+        <button class="swap-btn" onclick="openSwapModal('10am – 5:30pm')">Request Swap</button>
+    </div>
+
+    <div class="day-label">Thu, Dec 11</div>
+    <div class="shift-card">
+        <div class="shift-time">11am – 9pm</div>
+        <div class="shift-details">Physician Assistant</div>
+        <div class="shift-details">Baylor Scott & White</div>
+        <div class="shift-meta">10 hrs</div>
+        <button class="swap-btn" onclick="openSwapModal('10am – 5:30pm')">Request Swap</button>
+    </div>
+
+</div>
+
+<!-- Modal -->
+<div id="swapModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeSwapModal()">&times;</span>
+        <h3>Request Shift Swap</h3>
+        <p id="selectedShift"></p>
+
+        <label><strong>Swap with colleague:</strong></label><br><br>
+        <select id="colleague" style="width:100%;padding:10px;border-radius:6px;font-size:15px;">
+            <option value="Dr. Smith">Dr. Smith</option>
+            <option value="Dr. Perez">Dr. Perez</option>
+            <option value="Dr. Lee">Dr. Lee</option>
+        </select>
+
+        <br><br>
+        <button class="swap-btn" onclick="sendSwapRequest()">Send Request</button>
+    </div>
+</div>
+
+<script>
+let chosenShift = "";
+
+function openSwapModal(shift) {
+    chosenShift = shift;
+    document.getElementById("selectedShift").innerHTML = "<strong>Shift:</strong> " + shift;
+    document.getElementById("swapModal").style.display = "flex";
+}
+
+function closeSwapModal() {
+    document.getElementById("swapModal").style.display = "none";
+}
+
+async function sendSwapRequest() {
+    const colleague = document.getElementById("colleague").value;
+
+    const payload = {
+        "accessorIds": ["680c0cd13efa2971fe53c4c7"],
+        "channels": ["notificationCenter", "push"],
+        "content": {
+            "en_US": { "text": `New Shift Swap Requested: ${chosenShift} → ${colleague}` },
+            "de_DE": { "text": `New Shift Swap Requested: ${chosenShift} → ${colleague}` }
+        },
+        "icon": { "en_US": {"type":"font","char":""}, "de_DE": {"type":"font","char":""} },
+        "image": {
+            "en_US": {
+                "type":"image",
+                "href":"https://i.pinimg.com/474x/66/9b/d7/669bd7e734f2e0615d94fb1af77cc6aa.jpg",
+                "width":600,"height":400
+            },
+            "de_DE": {
+                "type":"image",
+                "href":"https://i.pinimg.com/474x/66/9b/d7/669bd7e734f2e0615d94fb1af77cc6aa.jpg",
+                "width":600,"height":400
+            }
+        },
+        "link":"https://app.staffbase.com/content/page/6914e3ecd5cde774c74364f1"
+    };
+
+    try {
+        const res = await fetch("https://app.staffbase.com/api/branch/notifications", {
+            method: "POST",
+            headers: {
+                "Authorization":"Basic NjgwZmFjZDlhZmY4ZTkyZDQ3OGVkMzdjOk9bbztXbF9IMnQpQjM1SUpoe1ViVyshdVRaKWlFLU9xTF5KSSsta10hOUIobFRGLTJDc3F6ZW4yQzBFdFNZSzI=",
+                "Content-Type":"application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        alert(res.ok ? "Shift swap request sent!" : "Error sending request");
+    } catch {
+        alert("Network error");
+    }
+
+    closeSwapModal();
+}
+</script>
+
+</body>
+</html>
